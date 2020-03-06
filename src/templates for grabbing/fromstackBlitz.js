@@ -1,5 +1,6 @@
-// async to simulate API request
-export const getTransactionData = () => [
+//Assume the shape of the data is something like a database of users
+
+const getTransactionData =  [
   {
     transactionId: 20165,
     transactionDate: 1578071968,
@@ -128,3 +129,61 @@ export const getTransactionData = () => [
     ]
   }
 ];
+
+const Jan = 1
+const Feb = 2
+const Mar = 3
+
+const mapThrough = (transactionData, selectedMonth) => {
+
+const totalSpentOnSelectMonth = (start, end) => {
+    const filteredTransactionsByMonth = transactionData.filter((t) => {
+      if (t.transactionDate >= start && t.transactionDate <= end){
+        return t
+      };
+    })
+    console.log(filteredTransactionsByMonth);
+    let currentTotal = 0
+    filteredTransactionsByMonth.map(t => {
+      t["purchases"].map(p =>{
+        currentTotal += (p.price * p.quantity)
+        }
+      )
+    })
+
+    return currentTotal
+    }
+
+  switch(selectedMonth) {
+    case 1 :
+    return totalSpentOnSelectMonth(1577858400, 1580536799);
+    break;
+    case 2 :
+    return totalSpentOnSelectMonth(1580536800, 1583042399) 
+    break;
+    case 3 :
+    return totalSpentOnSelectMonth(1583042400, 1585717199) 
+    break;
+  }
+
+
+
+}
+
+
+const calculatePoints = transactionAmount => {
+  return (
+    Math.max(0, transactionAmount - 50) + Math.max(0, transactionAmount - 100)
+  );
+  //   if (transactionAmount >= 50 && transactionAmount <= 100) {
+  //     return transactionAmount-50
+  //     }
+
+  //     if (transactionAmount >= 100) {
+  //         return (50 + ((transactionAmount - 100) * 2))}
+
+  //  return 0
+};
+
+console.log("Money Spent on selected month" , mapThrough(getTransactionData,Jan))
+console.log ("Points earned for this month", calculatePoints(mapThrough(getTransactionData,Jan)))

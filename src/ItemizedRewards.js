@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
-import transactionData from './transactionData';
+import React, {useState, useEffect} from 'react';
+import {getTransactionData} from './transactionData';
+import {filterTransactionsByMonth} from './pointCalculator';
+
 import {Link as RRLink, useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -21,17 +23,67 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Link from '@material-ui/core/Link';
 
-//Rename this page. It's confusing.
+const useStyles = makeStyles(theme => ({
+  table: {
+    minWidth: 650
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  },
+  error: {
+    color: theme.palette.secondary.main
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2)
+  },
+  userPaper: {
+    backgroundColor: theme.palette.primary.light,
+    borderRadius: 50,
+    padding: 10
+  },
+  authorLink: {
+    color: 'white'
+  }
+}));
 
 export const ItemizedRewards = () => {
   const history = useHistory();
+  const classes = useStyles();
+
+  const [currentUserData, setCurrentUserData] = useState('');
+  const [monthOfReward, setMonthOfReward] = useState(1);
+
+  useEffect(() => {
+    const resultFromAPIRequest = getTransactionData();
+    setCurrentUserData(
+      filterTransactionsByMonth(resultFromAPIRequest, monthOfReward)
+    );
+  }, [monthOfReward]);
 
   return (
     <>
       <Typography component="h1" variant="h5">
         {'ITEMIZED PAGE'}
       </Typography>
-      {/* <TableContainer component={Paper}>
+      <TableContainer component={Paper}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -44,49 +96,38 @@ export const ItemizedRewards = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {booksState.map(
-              ({
-                id,
-                title,
-                author,
-                created_date,
-                edited_by_user,
-                edited_date,
-                author_id
-              }) => (
-                <TableRow key={id}>
-                  <TableCell component="th" scope="row">
-                    {id}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Link>
-                      <RRLink to={'/book/' + id} id={id}>
-                        {title}
-                      </RRLink>
-                    </Link>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Paper color="primary" className={classes.userPaper}>
-                      <RRLink
-                        className={classes.authorLink}
-                        to={'/UserInfo/' + author_id}
-                        author_id={author_id}
-                      >
-                        <Link variant="body2">{author}</Link>
-                      </RRLink>
-                    </Paper>
-                  </TableCell>
-                  <TableCell align="right">
-                    {new Date(created_date).toDateString()}
-                  </TableCell>
-                  <TableCell align="right">{edited_by_user}</TableCell>
-                  <TableCell align="right">{edited_date}</TableCell>
-                </TableRow>
-              )
+            {currentUserData.map(t =>
+              t.purchases.map(({price, quantity, itemName, itemId}, i) => (
+                <div key={i}>
+                  <TableRow key={itemId}>
+                    <TableCell component="th" scope="row">
+                      {price}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Link>
+                        <RRLink to={'/item/' + itemId} itemName={itemName}>
+                          {quantity}
+                        </RRLink>
+                      </Link>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Paper color="primary">
+                        {/* <RRLink
+                          className={classes.authorLink}
+                          to={'/UserInfo/' + author_id}
+                          author_id={author_id}
+                        > */}
+                        <Link variant="body2">{itemName}</Link>
+                        {/* </RRLink> */}
+                      </Paper>
+                    </TableCell>
+                  </TableRow>
+                </div>
+              ))
             )}
           </TableBody>
         </Table>
-      </TableContainer> */}
+      </TableContainer>
     </>
   );
 };
