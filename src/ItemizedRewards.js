@@ -75,14 +75,9 @@ export const ItemizedRewards = () => {
                             {t.transactionId}
                           </TableCell>
                           <TableCell align="right">
-                            <Link>
-                              <RRLink
-                                to={'/item/' + itemId}
-                                itemName={itemName}
-                              >
-                                {itemName}
-                              </RRLink>
-                            </Link>
+                            <RRLink to={'/item/' + itemId} itemName={itemName}>
+                              {itemName}
+                            </RRLink>
                           </TableCell>
                           <TableCell align="right">{price}</TableCell>
                           <TableCell align="right">{quantity}</TableCell>

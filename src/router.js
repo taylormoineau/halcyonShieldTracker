@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import {NavBar} from './NavBar';
 import {ItemizedRewards} from './ItemizedRewards.js';
+import {ItemInfo} from './ItemInfo';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {SplashRewards} from './SplashRewards.js';
@@ -64,6 +65,9 @@ export const Router = () => {
               <Switch>
                 <Route path="/itemized">
                   <ItemizedRewards />
+                </Route>
+                <Route path="/item/:id">
+                  <ItemInfo />
                 </Route>
                 <Route path="/">
                   <SplashRewards />
