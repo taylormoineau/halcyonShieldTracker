@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import TablePagination from '@material-ui/core/TablePagination';
+
 import {getTransactionData} from './transactionData';
 import {filterTransactionsByMonth} from './pointCalculator';
-
+import {LoadingPage} from './LoadingPage.js';
 import {Link as RRLink, useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -26,41 +28,6 @@ import Link from '@material-ui/core/Link';
 const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 650
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  },
-  error: {
-    color: theme.palette.secondary.main
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  },
-  userPaper: {
-    backgroundColor: theme.palette.primary.light,
-    borderRadius: 50,
-    padding: 10
-  },
-  authorLink: {
-    color: 'white'
   }
 }));
 
@@ -76,58 +43,59 @@ export const ItemizedRewards = () => {
     setCurrentUserData(
       filterTransactionsByMonth(resultFromAPIRequest, monthOfReward)
     );
+    console.log(currentUserData);
   }, [monthOfReward]);
 
   return (
-    <>
-      <Typography component="h1" variant="h5">
-        {'ITEMIZED PAGE'}
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Book id:</TableCell>
-              <TableCell align="right">Title:</TableCell>
-              <TableCell align="right">Author:</TableCell>
-              <TableCell align="right">Date Created:</TableCell>
-              <TableCell align="right">Last Edited By:</TableCell>
-              <TableCell align="right">Date of Last Edit:</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {currentUserData.map(t =>
-              t.purchases.map(({price, quantity, itemName, itemId}, i) => (
-                <div key={i}>
-                  <TableRow key={itemId}>
-                    <TableCell component="th" scope="row">
-                      {price}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Link>
-                        <RRLink to={'/item/' + itemId} itemName={itemName}>
-                          {quantity}
-                        </RRLink>
-                      </Link>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Paper color="primary">
-                        {/* <RRLink
-                          className={classes.authorLink}
-                          to={'/UserInfo/' + author_id}
-                          author_id={author_id}
-                        > */}
-                        <Link variant="body2">{itemName}</Link>
-                        {/* </RRLink> */}
-                      </Paper>
-                    </TableCell>
+    <div>
+      {!currentUserData ? (
+        <LoadingPage />
+      ) : (
+        <Container component="main" maxWidth="lg">
+          <Paper>
+            <Typography component="h1" variant="h3" align="center">
+              Itemized List of Purchases
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table className={classes.table}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="right">Transaction Id:</TableCell>
+                    <TableCell align="right">Item Purchased:</TableCell>
+                    <TableCell align="right">Price:</TableCell>
+                    <TableCell align="right">Quantity Purchased:</TableCell>
                   </TableRow>
-                </div>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+                </TableHead>
+                <TableBody>
+                  {currentUserData.map(t =>
+                    t.purchases.map(
+                      ({price, quantity, itemName, itemId}, i) => (
+                        <TableRow key={itemId}>
+                          <TableCell component="th" scope="row" align="right">
+                            {t.transactionId}
+                          </TableCell>
+                          <TableCell align="right">
+                            <Link>
+                              <RRLink
+                                to={'/item/' + itemId}
+                                itemName={itemName}
+                              >
+                                {itemName}
+                              </RRLink>
+                            </Link>
+                          </TableCell>
+                          <TableCell align="right">{price}</TableCell>
+                          <TableCell align="right">{quantity}</TableCell>
+                        </TableRow>
+                      )
+                    )
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Container>
+      )}
+    </div>
   );
 };

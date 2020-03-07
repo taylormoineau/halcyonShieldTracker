@@ -1,4 +1,6 @@
-// async to simulate API request
+// Assuming the shape of the data was a database/API request that returned an array of transactions from a specific user.
+// The function is async to emulate an API request.
+
 export const getTransactionData = () => [
   {
     transactionId: 20165,
