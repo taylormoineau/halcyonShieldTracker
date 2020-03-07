@@ -1,0 +1,9 @@
+.pointHighlight{
+	background: linear-gradient(to bottom, #30CFD0 0%, #330867 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+    font-size: 40px;
+  font-family: 'Poppins', sans-serif;
+    };
+    
+    
