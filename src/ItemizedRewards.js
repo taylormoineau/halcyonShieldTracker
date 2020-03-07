@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './rewards.css';
 
 import {getTransactionData} from './transactionData';
-import {filterTransactionsByMonth} from './pointCalculator';
+import {filterTransactionsByMonth} from './utils';
 import {LoadingPage} from './LoadingPage.js';
 import {Link as RRLink, useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';

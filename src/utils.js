@@ -1,5 +1,3 @@
-import {getTransactionData} from './transactionData';
-
 export const filterTransactionsByMonth = (transactionData, selectedMonth) => {
   const filterTransactions = (monthStart, monthEnd) =>
     transactionData.filter(t => {
@@ -17,3 +15,19 @@ export const filterTransactionsByMonth = (transactionData, selectedMonth) => {
       return filterTransactions(1583042400, 1585717199);
   }
 };
+
+export const sumOfTransactions = transactionsArr => {
+  let runningTotal = 0;
+
+  transactionsArr.map(t => {
+    t.purchases.map(p => {
+      runningTotal += p.price * p.quantity;
+    });
+  });
+  return runningTotal;
+};
+
+export const calculatePoints = transactionAmount =>
+  Math.floor(
+    Math.max(0, transactionAmount - 50) + Math.max(0, transactionAmount - 100)
+  );

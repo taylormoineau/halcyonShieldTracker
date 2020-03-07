@@ -3,14 +3,15 @@ import {LoadingPage} from './LoadingPage';
 import {getTransactionData} from './transactionData';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import {filterTransactionsByMonth} from './pointCalculator';
+import {
+  filterTransactionsByMonth,
+  sumOfTransactions,
+  calculatePoints
+} from './utils';
 import {Link as RRLink} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
-
 import Paper from '@material-ui/core/Paper';
-
 import Typography from '@material-ui/core/Typography';
-
 import Link from '@material-ui/core/Link';
 import './rewards.css';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
@@ -36,10 +37,20 @@ const useStyles = makeStyles(theme => ({
 export const SplashRewards = () => {
   const [currentUserData, setCurrentUserData] = useState('');
   const [monthOfReward, setMonthOfReward] = useState(1);
-  const [currentDisplayedMonth, setCurrentDisplayedMonth] = useState(
+  const [displayedMonthTotalPoints, setdisplayedMonthTotalPoints] = useState(
     simpleMonthSwitcher(monthOfReward)
   );
+  const [displayedMonthTotalSpent, setdisplayedMonthTotalSpent] = useState();
+
   const classes = useStyles();
+
+  const totalPointsEarned = calculatePoints(
+    sumOfTransactions(getTransactionData())
+  );
+
+  const pointsEarnedThisMonth = calculatePoints(
+    filterTransactionsByMonth(getTransactionData(), monthOfReward)
+  );
 
   const prevMonth = () => {
     monthOfReward <= 1
@@ -86,7 +97,7 @@ export const SplashRewards = () => {
               align="center"
               className="pointHighlight"
             >
-              2940
+              {totalPointsEarned}
             </Typography>
             <Typography component="h3" variant="h3" align="center">
               points so far!
@@ -122,7 +133,7 @@ export const SplashRewards = () => {
                   variant="h4"
                   className="pointHighlight"
                 >
-                  49320 points
+                  {pointsEarnedThisMonth}
                 </Typography>
               </Grid>
               <Grid item align="right">
@@ -150,7 +161,7 @@ export const SplashRewards = () => {
               </Grid>
               <Grid item>
                 <Typography component="h4" variant="h4">
-                  {currentDisplayedMonth}
+                  jan
                 </Typography>
               </Grid>
               <Grid item>
