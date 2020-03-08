@@ -6,11 +6,9 @@ export const filterTransactionsByMonth = (transactionData, selectedMonth) =>
 export const sumOfTransactions = transactionsArr => {
   let runningTotal = 0;
 
-  transactionsArr.map(t => {
-    t.purchases.map(p => {
-      runningTotal += p.price * p.quantity;
-    });
-  });
+  transactionsArr.map(t =>
+    t.purchases.map(p => (runningTotal += p.price * p.quantity))
+  );
   return runningTotal;
 };
 

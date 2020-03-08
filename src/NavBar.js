@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import {useHistory} from 'react-router-dom';
 import HomeIcon from '@material-ui/icons/Home';
 
-export const NavBar = ({classes, currentUser, logout}) => {
+export const NavBar = ({classes}) => {
   let history = useHistory();
   return (
     <AppBar position="static">

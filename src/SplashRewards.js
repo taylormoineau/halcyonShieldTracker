@@ -1,49 +1,44 @@
 import React, {useState, useEffect} from 'react';
 import {LoadingPage} from './LoadingPage';
 import {getTransactionData} from './transactionData';
-import {NavagationButtons} from './NavagationButtons';
+import {NavigationButtons} from './NavigationButtons';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+
 import {
   filterTransactionsByMonth,
   sumOfTransactions,
   calculatePoints,
   simpleMonthConverter
 } from './utils';
-import {Link as RRLink, useParams, useHistory} from 'react-router-dom';
+import {Link as RRLink, useParams} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import './rewards.css';
 
-const useStyles = makeStyles(theme => ({
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  },
-  paperForSplashPage: {padding: 30}
+const useStyles = makeStyles(() => ({
+  paperForSplashPage: {padding: 30},
+  boxMargin: {marginTop: 20, marginBottom: 35}
 }));
 export const SplashRewards = () => {
-  const [currentUserData, setCurrentUserData] = useState('');
+  const [currentUserData, setCurrentUserData] = useState([]);
   const {currentMonth} = useParams();
   const currentMonthAsNum = +currentMonth;
-  const history = useHistory();
   const classes = useStyles();
 
-  const totalPointsEarned = calculatePoints(
-    sumOfTransactions(getTransactionData())
-  );
+  const totalPointsEarned = calculatePoints(sumOfTransactions(currentUserData));
 
   const moneySpentThisMonth = sumOfTransactions(
-    filterTransactionsByMonth(getTransactionData(), currentMonthAsNum)
+    filterTransactionsByMonth(currentUserData, currentMonthAsNum)
   );
 
   const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
 
   useEffect(() => {
     const resultFromAPIRequest = getTransactionData();
-    setCurrentUserData(
-      filterTransactionsByMonth(resultFromAPIRequest, currentMonthAsNum)
-    );
+    setCurrentUserData(resultFromAPIRequest);
   }, [currentMonthAsNum]);
 
   return (
@@ -56,20 +51,22 @@ export const SplashRewards = () => {
             <Typography component="h1" variant="h1" align="center">
               Check out your rewards!
             </Typography>
-            <Typography component="h3" variant="h3" align="center">
-              Wow USERNAME, you have earned
-            </Typography>
-            <Typography
-              component="h1"
-              variant="h1"
-              align="center"
-              className="pointHighlight"
-            >
-              {totalPointsEarned}
-            </Typography>
-            <Typography component="h3" variant="h3" align="center">
-              points so far!
-            </Typography>
+            <Box className={classes.boxMargin}>
+              <Typography component="h3" variant="h3" align="center">
+                Wow John Smithe, you have earned
+              </Typography>
+              <Typography
+                component="h1"
+                variant="h1"
+                align="center"
+                className="pointHighlight"
+              >
+                {totalPointsEarned}
+              </Typography>
+              <Typography component="h3" variant="h3" align="center">
+                points so far!
+              </Typography>
+            </Box>
             <Grid
               container
               spacing={3}
@@ -83,7 +80,7 @@ export const SplashRewards = () => {
               </Grid>
               <Grid item>
                 <Typography component="h4" variant="h4">
-                  From spending:
+                  By spending:
                 </Typography>
               </Grid>
             </Grid>
@@ -112,7 +109,7 @@ export const SplashRewards = () => {
                 </Typography>
               </Grid>
             </Grid>
-            <NavagationButtons
+            <NavigationButtons
               currentMonthAsNum={currentMonthAsNum}
               destination={'/'}
             />
@@ -129,64 +126,6 @@ export const SplashRewards = () => {
           </Paper>
         </div>
       )}
-
-      {/* <LoadingPage /> */}
-      {/* <TableContainer component={Paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Book id:</TableCell>
-              <TableCell align="right">Title:</TableCell>
-              <TableCell align="right">Author:</TableCell>
-              <TableCell align="right">Date Created:</TableCell>
-              <TableCell align="right">Last Edited By:</TableCell>
-              <TableCell align="right">Date of Last Edit:</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {booksState.map(
-              ({
-                id,
-                title,
-                author,
-                created_date,
-                edited_by_user,
-                edited_date,
-                author_id
-              }) => (
-                <TableRow key={id}>
-                  <TableCell component="th" scope="row">
-                    {id}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Link>
-                      <RRLink to={'/book/' + id} id={id}>
-                        {title}
-                      </RRLink>
-                    </Link>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Paper color="primary" className={classes.userPaper}>
-                      <RRLink
-                        className={classes.authorLink}
-                        to={'/UserInfo/' + author_id}
-                        author_id={author_id}
-                      >
-                        <Link variant="body2">{author}</Link>
-                      </RRLink>
-                    </Paper>
-                  </TableCell>
-                  <TableCell align="right">
-                    {new Date(created_date).toDateString()}
-                  </TableCell>
-                  <TableCell align="right">{edited_by_user}</TableCell>
-                  <TableCell align="right">{edited_date}</TableCell>
-                </TableRow>
-              )
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
     </>
   );
 };

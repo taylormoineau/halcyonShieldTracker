@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {useHistory} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     padding: 20
   }
 }));
-export const NavagationButtons = ({currentMonthAsNum, destination}) => {
+export const NavigationButtons = ({currentMonthAsNum, destination}) => {
   const history = useHistory();
   const classes = useStyles();
 

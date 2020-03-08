@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import {NavBar} from './NavBar';
 import {ItemizedRewards} from './ItemizedRewards.js';
 import {ItemInfo} from './ItemInfo';
@@ -53,6 +53,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Router = () => {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <ThemeProvider theme={theme}>
@@ -72,6 +73,7 @@ export const Router = () => {
                 <Route path="/:currentMonth">
                   <SplashRewards />
                 </Route>
+                <Redirect exact from="/" to="/1" />
               </Switch>
             </div>
           </Container>

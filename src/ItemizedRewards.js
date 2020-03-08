@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './rewards.css';
-import {NavagationButtons} from './NavagationButtons';
+import {NavigationButtons} from './NavigationButtons';
 import {
   filterTransactionsByMonth,
   sumOfTransactions,
@@ -18,14 +18,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import Grid from '@material-ui/core/Grid';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   table: {
     minWidth: 750,
     minHeight: 500
@@ -40,14 +36,18 @@ export const ItemizedRewards = () => {
   const {currentMonth} = useParams();
   const currentMonthAsNum = +currentMonth;
 
-  const [currentUserData, setCurrentUserData] = useState('');
+  const [currentUserData, setCurrentUserData] = useState([]);
+
+  const moneySpentThisMonth = sumOfTransactions(
+    filterTransactionsByMonth(currentUserData, currentMonthAsNum)
+  );
+
+  const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
 
   useEffect(() => {
     const resultFromAPIRequest = getTransactionData();
-    setCurrentUserData(
-      filterTransactionsByMonth(resultFromAPIRequest, currentMonthAsNum)
-    );
-  }, [currentMonthAsNum]);
+    setCurrentUserData(resultFromAPIRequest);
+  }, []);
 
   return (
     <div>
@@ -72,7 +72,10 @@ export const ItemizedRewards = () => {
                 </TableHead>
 
                 <TableBody>
-                  {currentUserData.map(t =>
+                  {filterTransactionsByMonth(
+                    currentUserData,
+                    currentMonthAsNum
+                  ).map(t =>
                     t.purchases.map(({price, quantity, itemName, itemId}) => (
                       <TableRow key={itemId}>
                         <TableCell component="th" scope="row" align="left">
@@ -95,18 +98,23 @@ export const ItemizedRewards = () => {
                     <TableCell colSpan={4} align="left">
                       Total of Purchases:
                     </TableCell>
-                    <TableCell align="right">12422</TableCell>
+                    <TableCell align="right">
+                      ${moneySpentThisMonth.toFixed(2)}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell colSpan={4} align="left">
-                      Points earned in MONTH:
+                      Points earned in {simpleMonthConverter(currentMonthAsNum)}
+                      :
                     </TableCell>
-                    <TableCell align="right">12422</TableCell>
+                    <TableCell align="right">
+                      {pointsEarnedThisMonth} pts
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
-            <NavagationButtons
+            <NavigationButtons
               currentMonthAsNum={currentMonthAsNum}
               destination={'/itemized/'}
             />
