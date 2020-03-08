@@ -48,12 +48,9 @@ export const SplashRewards = () => {
       ) : (
         <div>
           <Paper className={classes.paperForSplashPage}>
-            <Typography component="h1" variant="h1" align="center">
-              Check out your rewards!
-            </Typography>
             <Box className={classes.boxMargin}>
               <Typography component="h3" variant="h3" align="center">
-                Wow John Smithe, you have earned
+                Wow John Smith! You have earned
               </Typography>
               <Typography
                 component="h1"
