@@ -66,10 +66,10 @@ export const Router = () => {
                 <Route path="/itemized">
                   <ItemizedRewards />
                 </Route>
-                <Route path="/item/:id">
+                <Route path="/item/:itemId">
                   <ItemInfo />
                 </Route>
-                <Route path="/">
+                <Route path="/:currentMonth">
                   <SplashRewards />
                 </Route>
               </Switch>

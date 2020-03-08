@@ -1,8 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import './rewards.css';
-
+import {
+  filterTransactionsByMonth,
+  sumOfTransactions,
+  calculatePoints,
+  simpleMonthConverter
+} from './utils';
 import {getTransactionData} from './transactionData';
-import {filterTransactionsByMonth} from './utils';
 import {LoadingPage} from './LoadingPage.js';
 import {Link as RRLink, useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
@@ -15,42 +19,22 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Link from '@material-ui/core/Link';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import Grid from '@material-ui/core/Grid';
 
-const simpleMonthSwitcher = monthNum => {
-  switch (monthNum) {
-    case 1:
-      return 'January';
-    case 2:
-      return 'February';
-    case 3:
-      return 'March';
-  }
-};
-
 const useStyles = makeStyles(theme => ({
   table: {
-    minWidth: 650,
+    minWidth: 750,
     minHeight: 500
   },
   buttonContainer: {
-    marginTop: 20
+    padding: 20
   }
 }));
 
 export const ItemizedRewards = () => {
-  const history = useHistory();
   const classes = useStyles();
 
   const [currentUserData, setCurrentUserData] = useState('');
@@ -73,7 +57,6 @@ export const ItemizedRewards = () => {
     setCurrentUserData(
       filterTransactionsByMonth(resultFromAPIRequest, monthOfReward)
     );
-    console.log(currentUserData);
   }, [monthOfReward]);
 
   return (
@@ -100,25 +83,23 @@ export const ItemizedRewards = () => {
 
                 <TableBody>
                   {currentUserData.map(t =>
-                    t.purchases.map(
-                      ({price, quantity, itemName, itemId}, i) => (
-                        <TableRow key={itemId}>
-                          <TableCell component="th" scope="row" align="left">
-                            {t.transactionId}
-                          </TableCell>
-                          <TableCell align="right">
-                            {new Date(t.transactionDate * 1000).toDateString()}
-                          </TableCell>
-                          <TableCell align="right">
-                            <RRLink to={'/item/' + itemId} itemName={itemName}>
-                              {itemName}
-                            </RRLink>
-                          </TableCell>
-                          <TableCell align="right">${price}</TableCell>
-                          <TableCell align="right">{quantity}</TableCell>
-                        </TableRow>
-                      )
-                    )
+                    t.purchases.map(({price, quantity, itemName, itemId}) => (
+                      <TableRow key={itemId}>
+                        <TableCell component="th" scope="row" align="left">
+                          {t.transactionId}
+                        </TableCell>
+                        <TableCell align="right">
+                          {new Date(t.transactionDate * 1000).toDateString()}
+                        </TableCell>
+                        <TableCell align="right">
+                          <RRLink to={'/item/' + itemId} itemName={itemName}>
+                            {itemName}
+                          </RRLink>
+                        </TableCell>
+                        <TableCell align="right">${price}</TableCell>
+                        <TableCell align="right">{quantity}</TableCell>
+                      </TableRow>
+                    ))
                   )}
                   <TableRow>
                     <TableCell colSpan={4} align="left">
@@ -141,29 +122,33 @@ export const ItemizedRewards = () => {
               className={classes.buttonContainer}
             >
               <Grid item>
-                <Button
-                  onClick={prevMonth}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  <ArrowLeftIcon />
-                  Previous Month
-                </Button>
+                {monthOfReward > 1 && (
+                  <Button
+                    onClick={prevMonth}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    <ArrowLeftIcon />
+                    {simpleMonthConverter(monthOfReward - 1)}
+                  </Button>
+                )}
               </Grid>
 
               <Grid item>
-                <Button
-                  onClick={nextMonth}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Next Month
-                  <ArrowRightIcon />
-                </Button>
+                {monthOfReward < 3 && (
+                  <Button
+                    onClick={nextMonth}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    {simpleMonthConverter(monthOfReward + 1)}
+                    <ArrowRightIcon />
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Paper>

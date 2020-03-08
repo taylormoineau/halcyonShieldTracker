@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {LoadingPage} from './LoadingPage';
 import {getTransactionData} from './transactionData';
+import {NavagationButtons} from './NavagationButtons';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {
   filterTransactionsByMonth,
   sumOfTransactions,
-  calculatePoints
+  calculatePoints,
+  simpleMonthConverter
 } from './utils';
-import {Link as RRLink} from 'react-router-dom';
+import {Link as RRLink, useParams, useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -16,17 +18,6 @@ import Link from '@material-ui/core/Link';
 import './rewards.css';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-
-const simpleMonthSwitcher = monthNum => {
-  switch (monthNum) {
-    case 1:
-      return 'January';
-    case 2:
-      return 'February';
-    case 3:
-      return 'March';
-  }
-};
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -36,42 +27,35 @@ const useStyles = makeStyles(theme => ({
 }));
 export const SplashRewards = () => {
   const [currentUserData, setCurrentUserData] = useState('');
-  const [monthOfReward, setMonthOfReward] = useState(1);
-  const [displayedMonthTotalPoints, setdisplayedMonthTotalPoints] = useState(
-    simpleMonthSwitcher(monthOfReward)
-  );
-  const [displayedMonthTotalSpent, setdisplayedMonthTotalSpent] = useState();
-
+  const {currentMonth} = useParams();
+  const currentMonthAsNum = +currentMonth;
+  const history = useHistory();
   const classes = useStyles();
 
   const totalPointsEarned = calculatePoints(
     sumOfTransactions(getTransactionData())
   );
 
-  const pointsEarnedThisMonth = calculatePoints(
-    filterTransactionsByMonth(getTransactionData(), monthOfReward)
+  const moneySpentThisMonth = sumOfTransactions(
+    filterTransactionsByMonth(getTransactionData(), currentMonthAsNum)
   );
 
+  const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
+
   const prevMonth = () => {
-    monthOfReward <= 1
-      ? setMonthOfReward(1)
-      : setMonthOfReward(monthOfReward - 1);
+    if (currentMonthAsNum <= 1) history.push('/' + (currentMonthAsNum - 1));
   };
 
   const nextMonth = () => {
-    monthOfReward < 3
-      ? setMonthOfReward(monthOfReward + 1)
-      : setMonthOfReward(3);
+    if (currentMonthAsNum < 3) history.push('/' + (currentMonthAsNum + 1));
   };
-
-  //   const history = useHistory();
 
   useEffect(() => {
     const resultFromAPIRequest = getTransactionData();
     setCurrentUserData(
-      filterTransactionsByMonth(resultFromAPIRequest, monthOfReward)
+      filterTransactionsByMonth(resultFromAPIRequest, currentMonthAsNum)
     );
-  }, [monthOfReward]);
+  }, [currentMonthAsNum]);
 
   return (
     <>
@@ -80,11 +64,6 @@ export const SplashRewards = () => {
       ) : (
         <div>
           <Paper className={classes.paperForSplashPage}>
-            {currentUserData.map(t =>
-              t.purchases.map(({price, quantity, itemName}, i) => (
-                <div key={i}></div>
-              ))
-            )}
             <Typography component="h1" variant="h1" align="center">
               Check out your rewards!
             </Typography>
@@ -102,8 +81,6 @@ export const SplashRewards = () => {
             <Typography component="h3" variant="h3" align="center">
               points so far!
             </Typography>
-            Date:
-            {monthOfReward}
             <Grid
               container
               spacing={3}
@@ -112,7 +89,7 @@ export const SplashRewards = () => {
             >
               <Grid item>
                 <Typography component="h4" variant="h4">
-                  You earned:
+                  In {simpleMonthConverter(currentMonthAsNum)} you earned:
                 </Typography>
               </Grid>
               <Grid item>
@@ -133,7 +110,7 @@ export const SplashRewards = () => {
                   variant="h4"
                   className="pointHighlight"
                 >
-                  {pointsEarnedThisMonth}
+                  {pointsEarnedThisMonth} pts
                 </Typography>
               </Grid>
               <Grid item align="right">
@@ -142,41 +119,14 @@ export const SplashRewards = () => {
                   variant="h4"
                   className="pointHighlight"
                 >
-                  $93149
+                  ${moneySpentThisMonth}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container justify="space-between">
-              <Grid item>
-                <Button
-                  onClick={prevMonth}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  <ArrowLeftIcon />
-                  Previous Month
-                </Button>
-              </Grid>
-              <Grid item>
-                <Typography component="h4" variant="h4">
-                  jan
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={nextMonth}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Next Month
-                  <ArrowRightIcon />
-                </Button>
-              </Grid>
-            </Grid>
+            <NavagationButtons
+              currentMonthAsNum={currentMonthAsNum}
+              destination={'/'}
+            />
             <Grid container>
               <Grid item xs></Grid>
               <Grid item>
