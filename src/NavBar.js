@@ -14,11 +14,8 @@ export const NavBar = ({classes, currentUser, logout}) => {
         <Typography variant="h3" className={classes.title}>
           Rewards Page
         </Typography>
-        <Typography variant="h6" className={classes.title}>
-          {currentUser && `Logged in as ${currentUser.email}`}
-        </Typography>
 
-        <Button size="large" color="inherit" onClick={() => history.push('/')}>
+        <Button size="large" color="inherit" onClick={() => history.push('/1')}>
           <HomeIcon />
         </Button>
       </Toolbar>

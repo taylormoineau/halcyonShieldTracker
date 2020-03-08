@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './rewards.css';
+import {NavagationButtons} from './NavagationButtons';
 import {
   filterTransactionsByMonth,
   sumOfTransactions,
@@ -8,7 +9,7 @@ import {
 } from './utils';
 import {getTransactionData} from './transactionData';
 import {LoadingPage} from './LoadingPage.js';
-import {Link as RRLink, useHistory} from 'react-router-dom';
+import {Link as RRLink, useParams} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -36,28 +37,17 @@ const useStyles = makeStyles(theme => ({
 
 export const ItemizedRewards = () => {
   const classes = useStyles();
+  const {currentMonth} = useParams();
+  const currentMonthAsNum = +currentMonth;
 
   const [currentUserData, setCurrentUserData] = useState('');
-  const [monthOfReward, setMonthOfReward] = useState(1);
-
-  const prevMonth = () => {
-    monthOfReward <= 1
-      ? setMonthOfReward(1)
-      : setMonthOfReward(monthOfReward - 1);
-  };
-
-  const nextMonth = () => {
-    monthOfReward < 3
-      ? setMonthOfReward(monthOfReward + 1)
-      : setMonthOfReward(3);
-  };
 
   useEffect(() => {
     const resultFromAPIRequest = getTransactionData();
     setCurrentUserData(
-      filterTransactionsByMonth(resultFromAPIRequest, monthOfReward)
+      filterTransactionsByMonth(resultFromAPIRequest, currentMonthAsNum)
     );
-  }, [monthOfReward]);
+  }, [currentMonthAsNum]);
 
   return (
     <div>
@@ -116,41 +106,10 @@ export const ItemizedRewards = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Grid
-              container
-              justify="space-between"
-              className={classes.buttonContainer}
-            >
-              <Grid item>
-                {monthOfReward > 1 && (
-                  <Button
-                    onClick={prevMonth}
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    <ArrowLeftIcon />
-                    {simpleMonthConverter(monthOfReward - 1)}
-                  </Button>
-                )}
-              </Grid>
-
-              <Grid item>
-                {monthOfReward < 3 && (
-                  <Button
-                    onClick={nextMonth}
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    {simpleMonthConverter(monthOfReward + 1)}
-                    <ArrowRightIcon />
-                  </Button>
-                )}
-              </Grid>
-            </Grid>
+            <NavagationButtons
+              currentMonthAsNum={currentMonthAsNum}
+              destination={'/itemized/'}
+            />
           </Paper>
         </Container>
       )}

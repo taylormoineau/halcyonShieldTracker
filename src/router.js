@@ -63,7 +63,7 @@ export const Router = () => {
             <CssBaseline />
             <div className={classes.paper}>
               <Switch>
-                <Route path="/itemized">
+                <Route path="/itemized/:currentMonth">
                   <ItemizedRewards />
                 </Route>
                 <Route path="/item/:itemId">

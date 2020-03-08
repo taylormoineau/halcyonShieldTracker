@@ -3,7 +3,6 @@ import {LoadingPage} from './LoadingPage';
 import {getTransactionData} from './transactionData';
 import {NavagationButtons} from './NavagationButtons';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import {
   filterTransactionsByMonth,
   sumOfTransactions,
@@ -16,8 +15,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import './rewards.css';
-import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -41,14 +38,6 @@ export const SplashRewards = () => {
   );
 
   const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
-
-  const prevMonth = () => {
-    if (currentMonthAsNum <= 1) history.push('/' + (currentMonthAsNum - 1));
-  };
-
-  const nextMonth = () => {
-    if (currentMonthAsNum < 3) history.push('/' + (currentMonthAsNum + 1));
-  };
 
   useEffect(() => {
     const resultFromAPIRequest = getTransactionData();
@@ -119,7 +108,7 @@ export const SplashRewards = () => {
                   variant="h4"
                   className="pointHighlight"
                 >
-                  ${moneySpentThisMonth}
+                  ${moneySpentThisMonth.toFixed(2)}
                 </Typography>
               </Grid>
             </Grid>
@@ -130,7 +119,7 @@ export const SplashRewards = () => {
             <Grid container>
               <Grid item xs></Grid>
               <Grid item>
-                <RRLink to="/itemized">
+                <RRLink to={'/itemized/' + currentMonthAsNum}>
                   <Link variant="body2">
                     Curious how your points are broken down?
                   </Link>
