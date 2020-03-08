@@ -1,3 +1,30 @@
+Hello,
+
+Please find attached the little project I threw together to represent the Rewards Program.
+
+It consists of three main pages:
+
+1. Home ('/:currentMonth') - A splash page showing total points earned and a simple breakdown of this months spending/points.
+
+2. Itemized List ('/itemized/:currentMonth') - A page with a table to display itemized purchases and how they earned you points each month.
+
+3. Info for Items ('/item/:itemId') - A tiny page to emulate displaying a bit of data about individual purchases.
+
+Calculating and filtering functions are found in utils.js.
+
+A small loading div is located in LoadingPage.js
+
+Navigation buttons and logic are found in NavigationButtons.js
+
+Router.js wraps the entire app and holds its theming and a nav-bar. 
+Since it is so small, it just made sense to do it this way.
+
+Thank you!
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

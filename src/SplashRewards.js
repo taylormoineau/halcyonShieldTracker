@@ -1,3 +1,5 @@
+//This is the "Splash Page" for the rewards program.
+
 import React, {useState, useEffect} from 'react';
 import {LoadingPage} from './LoadingPage';
 import {getTransactionData} from './transactionData';
@@ -28,18 +30,26 @@ export const SplashRewards = () => {
   const currentMonthAsNum = +currentMonth;
   const classes = useStyles();
 
+  //Sums all transactions, then calculates the points.
+
   const totalPointsEarned = calculatePoints(sumOfTransactions(currentUserData));
+
+  //Same as above, but transaction filtered by current month from useParams()
 
   const moneySpentThisMonth = sumOfTransactions(
     filterTransactionsByMonth(currentUserData, currentMonthAsNum)
   );
 
+  //Same as above, but it calculates the points instead.
+
   const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
+
+  //Makes a single call to our pretend API, and sets "userData" to hold data.
 
   useEffect(() => {
     const resultFromAPIRequest = getTransactionData();
     setCurrentUserData(resultFromAPIRequest);
-  }, [currentMonthAsNum]);
+  }, []);
 
   return (
     <>

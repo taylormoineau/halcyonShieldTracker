@@ -1,3 +1,5 @@
+//Router for the application.
+
 import React from 'react';
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import {NavBar} from './NavBar';

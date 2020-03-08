@@ -1,3 +1,5 @@
+//Basic NavBar. Nothing fancy here. Just a title and a button to take you home.
+
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';

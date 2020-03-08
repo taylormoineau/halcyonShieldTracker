@@ -1,3 +1,6 @@
+//A simple loading page which will show while awaiting the API call.
+//Loads a header and a spinning GIF
+
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -16,7 +19,7 @@ export const LoadingPage = () => {
   return (
     <React.Fragment>
       <Paper elevation={3} className={classes.paperForLoading}>
-        <Typography component="h1" variant="h5">
+        <Typography component="h5" variant="h5">
           {'LOADING REWARDS....'}
         </Typography>
         <img src={loadingGif} alt="loading" />

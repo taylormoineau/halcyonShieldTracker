@@ -1,3 +1,5 @@
+//Component for the buttons which navigate you through the months of rewards.
+
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +21,8 @@ const useStyles = makeStyles(theme => ({
 export const NavigationButtons = ({currentMonthAsNum, destination}) => {
   const history = useHistory();
   const classes = useStyles();
+
+  //simple functions to navigate you up or down the months in order.
 
   const prevMonth = () => {
     if (currentMonthAsNum >= 1)

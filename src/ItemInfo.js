@@ -1,3 +1,6 @@
+//Just a simple page to emulate the next step in this application. You could check individual purchases which
+//scored you those points.
+
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';

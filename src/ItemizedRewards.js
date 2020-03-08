@@ -1,3 +1,6 @@
+//This page itemizes each purchase, listing its relevent information and providing a link to each item.
+//The total of each months purchases and points earned are both listed at the bottom.
+
 import React, {useState, useEffect} from 'react';
 import './rewards.css';
 import {NavigationButtons} from './NavigationButtons';
@@ -35,14 +38,19 @@ export const ItemizedRewards = () => {
   const classes = useStyles();
   const {currentMonth} = useParams();
   const currentMonthAsNum = +currentMonth;
-
   const [currentUserData, setCurrentUserData] = useState([]);
+
+  //Sums transactions for this month after filtering them out of the array of transactions.
 
   const moneySpentThisMonth = sumOfTransactions(
     filterTransactionsByMonth(currentUserData, currentMonthAsNum)
   );
 
+  //Calculate points
+
   const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
+
+  //Makes a single call to our pretend API, and sets "userData" to hold data.
 
   useEffect(() => {
     const resultFromAPIRequest = getTransactionData();
