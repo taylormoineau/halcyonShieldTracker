@@ -4,7 +4,7 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import {simpleMonthConverter} from './utils';
+import {simpleMonthConverter} from './getTransactionData';
 import {makeStyles} from '@material-ui/core/styles';
 
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';

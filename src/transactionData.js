@@ -1,7 +1,7 @@
 // Assuming the shape of the data was a database/API request that returned an array of transactions from a specific user.
 //It's an array of John Smith's transactions. For each transaction it lists his purchases and their prices, ids, etc.
 
-export const getTransactionData = () => [
+export const transactionData = [
   {
     transactionId: 20165,
     transactionDate: 1578071968,

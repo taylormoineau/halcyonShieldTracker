@@ -2,22 +2,14 @@
 
 import React, {useState, useEffect} from 'react';
 import {LoadingPage} from './LoadingPage';
-import {getTransactionData} from './transactionData';
+import {getTransactionData, simpleMonthConverter} from './getTransactionData';
 import {NavigationButtons} from './NavigationButtons';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-
-import {
-  filterTransactionsByMonth,
-  sumOfTransactions,
-  calculatePoints,
-  simpleMonthConverter
-} from './utils';
 import {Link as RRLink, useParams} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import './rewards.css';
 
 const useStyles = makeStyles(() => ({
@@ -25,31 +17,14 @@ const useStyles = makeStyles(() => ({
   boxMargin: {marginTop: 20, marginBottom: 35}
 }));
 export const SplashRewards = () => {
-  const [currentUserData, setCurrentUserData] = useState([]);
+  const [currentUserData, setCurrentUserData] = useState('');
   const {currentMonth} = useParams();
   const currentMonthAsNum = +currentMonth;
   const classes = useStyles();
-
-  //Sums all transactions, then calculates the points.
-
-  const totalPointsEarned = calculatePoints(sumOfTransactions(currentUserData));
-
-  //Same as above, but transaction filtered by current month from useParams()
-
-  const moneySpentThisMonth = sumOfTransactions(
-    filterTransactionsByMonth(currentUserData, currentMonthAsNum)
-  );
-
-  //Same as above, but it calculates the points instead.
-
-  const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
-
-  //Makes a single call to our pretend API, and sets "userData" to hold data.
-
   useEffect(() => {
-    const resultFromAPIRequest = getTransactionData();
+    const resultFromAPIRequest = getTransactionData(currentMonthAsNum);
     setCurrentUserData(resultFromAPIRequest);
-  }, []);
+  }, [currentMonthAsNum]);
 
   return (
     <>
@@ -68,7 +43,7 @@ export const SplashRewards = () => {
                 align="center"
                 className="pointHighlight"
               >
-                {totalPointsEarned}
+                {currentUserData.totalPoints}
               </Typography>
               <Typography component="h3" variant="h3" align="center">
                 points so far!
@@ -103,7 +78,7 @@ export const SplashRewards = () => {
                   variant="h4"
                   className="pointHighlight"
                 >
-                  {pointsEarnedThisMonth} pts
+                  {currentUserData.points} pts
                 </Typography>
               </Grid>
               <Grid item align="right">
@@ -112,7 +87,7 @@ export const SplashRewards = () => {
                   variant="h4"
                   className="pointHighlight"
                 >
-                  ${moneySpentThisMonth.toFixed(2)}
+                  ${currentUserData.spent}
                 </Typography>
               </Grid>
             </Grid>
@@ -124,9 +99,7 @@ export const SplashRewards = () => {
               <Grid item xs></Grid>
               <Grid item>
                 <RRLink to={'/itemized/' + currentMonthAsNum}>
-                  <Link variant="body2">
-                    Curious how your points are broken down?
-                  </Link>
+                  Curious how your points are broken down?
                 </RRLink>
               </Grid>
             </Grid>

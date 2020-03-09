@@ -10,7 +10,11 @@ It consists of three main pages:
 
 3. Info for Items ('/item/:itemId') - A tiny page to emulate displaying a bit of data about individual purchases.
 
-Calculating and filtering functions are found in utils.js.
+The actual data is found in transactionData.js
+
+Calculating and filtering functions are found in getTransactionData.js.
+getTransactionData() is the primary function from this page, which takes
+the data and returns an object with the relevant filters applied.
 
 A small loading div is located in LoadingPage.js
 

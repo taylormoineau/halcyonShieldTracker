@@ -4,13 +4,7 @@
 import React, {useState, useEffect} from 'react';
 import './rewards.css';
 import {NavigationButtons} from './NavigationButtons';
-import {
-  filterTransactionsByMonth,
-  sumOfTransactions,
-  calculatePoints,
-  simpleMonthConverter
-} from './utils';
-import {getTransactionData} from './transactionData';
+import {getTransactionData, simpleMonthConverter} from './getTransactionData';
 import {LoadingPage} from './LoadingPage.js';
 import {Link as RRLink, useParams} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
@@ -38,24 +32,12 @@ export const ItemizedRewards = () => {
   const classes = useStyles();
   const {currentMonth} = useParams();
   const currentMonthAsNum = +currentMonth;
-  const [currentUserData, setCurrentUserData] = useState([]);
-
-  //Sums transactions for this month after filtering them out of the array of transactions.
-
-  const moneySpentThisMonth = sumOfTransactions(
-    filterTransactionsByMonth(currentUserData, currentMonthAsNum)
-  );
-
-  //Calculate points
-
-  const pointsEarnedThisMonth = calculatePoints(moneySpentThisMonth);
-
-  //Makes a single call to our pretend API, and sets "userData" to hold data.
+  const [currentUserData, setCurrentUserData] = useState('');
 
   useEffect(() => {
-    const resultFromAPIRequest = getTransactionData();
+    const resultFromAPIRequest = getTransactionData(currentMonthAsNum);
     setCurrentUserData(resultFromAPIRequest);
-  }, []);
+  }, [currentMonthAsNum]);
 
   return (
     <div>
@@ -80,34 +62,36 @@ export const ItemizedRewards = () => {
                 </TableHead>
 
                 <TableBody>
-                  {filterTransactionsByMonth(
-                    currentUserData,
-                    currentMonthAsNum
-                  ).map(t =>
-                    t.purchases.map(({price, quantity, itemName, itemId}) => (
+                  {currentUserData.purchases.map(
+                    ({
+                      price,
+                      quantity,
+                      itemName,
+                      itemId,
+                      transactionId,
+                      transactionDate
+                    }) => (
                       <TableRow key={itemId}>
                         <TableCell component="th" scope="row" align="left">
-                          {t.transactionId}
+                          {transactionId}
                         </TableCell>
                         <TableCell align="right">
-                          {new Date(t.transactionDate * 1000).toDateString()}
+                          {new Date(transactionDate * 1000).toDateString()}
                         </TableCell>
                         <TableCell align="right">
-                          <RRLink to={'/item/' + itemId} itemName={itemName}>
-                            {itemName}
-                          </RRLink>
+                          <RRLink to={'/item/' + itemId}>{itemName}</RRLink>
                         </TableCell>
                         <TableCell align="right">${price}</TableCell>
                         <TableCell align="right">{quantity}</TableCell>
                       </TableRow>
-                    ))
+                    )
                   )}
                   <TableRow>
                     <TableCell colSpan={4} align="left">
                       Total of Purchases:
                     </TableCell>
                     <TableCell align="right">
-                      ${moneySpentThisMonth.toFixed(2)}
+                      ${currentUserData.spent}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -116,7 +100,7 @@ export const ItemizedRewards = () => {
                       :
                     </TableCell>
                     <TableCell align="right">
-                      {pointsEarnedThisMonth} pts
+                      {currentUserData.points} pts
                     </TableCell>
                   </TableRow>
                 </TableBody>
