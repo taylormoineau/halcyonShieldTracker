@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import {getItemInfo} from './getTransactionData';
+import {LoadingPage} from './LoadingPage';
 
 const useStyles = makeStyles(() => ({
   paperForInfo: {
@@ -21,20 +22,27 @@ export const ItemInfo = () => {
   const [currentItemInfo, setCurrentItemInfo] = useState('');
 
   useEffect(() => {
-    const resultFromAPIRequest = getItemInfo(itemIdAsNum);
-    setCurrentItemInfo(resultFromAPIRequest);
+    const fetchNSet = async () =>
+      setCurrentItemInfo(await getItemInfo(itemIdAsNum));
+    fetchNSet();
   }, [itemIdAsNum]);
 
   return (
-    <Paper className={classes.paperForInfo}>
-      <Typography variant="h5">
-        Here is some info about your item or a link to the shop page!
-      </Typography>
-      <Typography variant="h3">Item Id: {itemId}</Typography>
-      <Typography variant="h3">
-        Item Name: {currentItemInfo.itemName}
-      </Typography>
-      <Typography variant="h3">Price: ${currentItemInfo.price}</Typography>
-    </Paper>
+    <>
+      {!currentItemInfo ? (
+        <LoadingPage />
+      ) : (
+        <Paper className={classes.paperForInfo}>
+          <Typography variant="h5">
+            Here is some info about your item or a link to the shop page!
+          </Typography>
+          <Typography variant="h3">Item Id: {itemId}</Typography>
+          <Typography variant="h3">
+            Item Name: {currentItemInfo.itemName}
+          </Typography>
+          <Typography variant="h3">Price: ${currentItemInfo.price}</Typography>
+        </Paper>
+      )}
+    </>
   );
 };

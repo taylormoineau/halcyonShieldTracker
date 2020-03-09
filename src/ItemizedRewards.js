@@ -35,8 +35,9 @@ export const ItemizedRewards = () => {
   const [currentUserData, setCurrentUserData] = useState('');
 
   useEffect(() => {
-    const resultFromAPIRequest = getTransactionData(currentMonthAsNum);
-    setCurrentUserData(resultFromAPIRequest);
+    const fetchNSet = async () =>
+      setCurrentUserData(await getTransactionData(currentMonthAsNum));
+    fetchNSet();
   }, [currentMonthAsNum]);
 
   return (

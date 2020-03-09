@@ -22,8 +22,9 @@ export const SplashRewards = () => {
   const currentMonthAsNum = +currentMonth;
   const classes = useStyles();
   useEffect(() => {
-    const resultFromAPIRequest = getTransactionData(currentMonthAsNum);
-    setCurrentUserData(resultFromAPIRequest);
+    const fetchNSet = async () =>
+      setCurrentUserData(await getTransactionData(currentMonthAsNum));
+    fetchNSet();
   }, [currentMonthAsNum]);
 
   return (
