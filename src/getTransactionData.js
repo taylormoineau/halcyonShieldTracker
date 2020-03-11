@@ -29,11 +29,11 @@ const calculatePoints = transactionAmount =>
 const months = ['January', 'February', 'March'];
 export const simpleMonthConverter = monthNum => months[monthNum - 1];
 
-const wait = milliseconds =>
+const awaitDatabaseResponse = milliseconds =>
   new Promise(resolve => setTimeout(resolve, milliseconds));
 
 export const getTransactionData = async selectedMonth => {
-  await wait(500); // simulates waiting for the network/backend
+  await awaitDatabaseResponse(500); // simulates waiting for the network/backend
   const transactionsFilteredByMonth = transactionData.filter(
     t => new Date(t.transactionDate * 1000).getMonth() + 1 === selectedMonth
   );
@@ -50,7 +50,7 @@ export const getTransactionData = async selectedMonth => {
 };
 
 export const getItemInfo = async itemId => {
-  await wait(500); // simulates waiting for the network/backend
+  await awaitDatabaseResponse(500); // simulates waiting for the network/backend
 
   const matchId = p => p.itemId === itemId;
   const transaction = transactionData.find(d => d.purchases.some(matchId));
