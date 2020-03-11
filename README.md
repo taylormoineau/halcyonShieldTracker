@@ -2,6 +2,10 @@ Hello,
 
 Please find attached the little project I threw together to represent the Rewards Program.
 
+You can view this easily on Code Sandbox by following this link: 
+
+https://46uzx.csb.app/1
+
 It consists of three main pages:
 
 1. Home ('/:currentMonth') - A splash page showing total points earned and a simple breakdown of this months spending/points.
