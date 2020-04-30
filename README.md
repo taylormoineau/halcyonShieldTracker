@@ -1,36 +1,13 @@
-Hello,
+This is a little project I am working on to track the production of face-shields by my current temp job. 
 
-Please find attached the little project I threw together to represent the Rewards Program.
+It is cloned from another of my projects, and felt appropriate to re-purpose some of the files for this one. I will be deleting what I do not need for it.
 
-You can view this easily on Code Sandbox by following this link: 
+GOALS:
 
-https://46uzx.csb.app/1
-
-It consists of three main pages:
-
-1. Home ('/:currentMonth') - A splash page showing total points earned and a simple breakdown of this months spending/points.
-
-2. Itemized List ('/itemized/:currentMonth') - A page with a table to display itemized purchases and how they earned you points each month.
-
-3. Info for Items ('/item/:itemId') - A tiny page to emulate displaying a bit of data about individual purchases.
-
-The actual data is found in transactionData.js
-
-Calculating and filtering functions are found in getTransactionData.js.
-getTransactionData() is the primary function from this page, which takes
-the data and returns an object with the relevant filters applied.
-
-A small loading div is located in LoadingPage.js
-
-Navigation buttons and logic are found in NavigationButtons.js
-
-Router.js wraps the entire app and holds its theming and a nav-bar. 
-Since it is so small, it just made sense to do it this way.
-
-Thank you!
-
-
-
+-Provide place for input of current stock.
+-Provide input for today's goal.
+-Based on current stock of supplies, calculate hours and people needed at each station to reach goal by end of the day (or week).
+-(bonus) calculate how long until we run out of the supplies to make the stock. Example: If we have 100,000 snaps, how long until we run out? 
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

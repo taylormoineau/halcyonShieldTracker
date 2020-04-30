@@ -2,6 +2,17 @@
 //It's an array of John Smith's transactions. For each transaction it lists his purchases and their prices, ids, etc.
 
 import {transactionData} from './transactionData';
+import {data} from './data';
+
+export const sumOfSeconds = () => {
+  let runningTotal = 0;
+
+  for (const t of data) {
+    runningTotal += t.timeReqPer;
+  }
+
+  return runningTotal;
+};
 
 //Function to sum an array of transactions sent to it.
 

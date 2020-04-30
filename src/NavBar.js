@@ -14,7 +14,7 @@ export const NavBar = ({classes}) => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h3" className={classes.title}>
-          Rewards Page
+          Halcyon Face-Shield Production
         </Typography>
 
         <Button size="large" color="inherit" onClick={() => history.push('/1')}>

@@ -2,10 +2,16 @@
 //The total of each months purchases and points earned are both listed at the bottom.
 
 import React, {useState, useEffect} from 'react';
+import TextField from '@material-ui/core/TextField';
 import './rewards.css';
 import {NavigationButtons} from './NavigationButtons';
-import {getTransactionData, simpleMonthConverter} from './getTransactionData';
+import {
+  getTransactionData,
+  simpleMonthConverter,
+  sumOfSeconds
+} from './getTransactionData';
 import {LoadingPage} from './LoadingPage.js';
+import {data} from './data';
 import {Link as RRLink, useParams} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -17,6 +23,15 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+
+const fieldArr = [
+  {fieldName: 'elastic_prepped', label: 'Boxes of prepped el. bands leftover'},
+  {fieldName: 'foamed', label: 'Foamed Shields leftover'},
+  {fieldName: 'snaps', label: 'Snapped Shields (uncleaned)'},
+  {fieldName: 'city', label: 'City'},
+  {fieldName: 'country', label: 'Country'},
+  {fieldName: 'goal', label: "Today's goal"}
+];
 
 const useStyles = makeStyles(() => ({
   table: {
@@ -48,60 +63,64 @@ export const ItemizedRewards = () => {
         <Container component="main" maxWidth="lg">
           <Paper>
             <Typography component="h1" variant="h3" align="center">
-              Itemized List of Purchases
+              What is left over from yesterday? What is the goal today?
+            </Typography>
+            {fieldArr.map(({fieldName, type = 'text', label}) => (
+              <TextField
+                key={fieldName}
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                label={label}
+                type={type}
+              />
+            ))}
+            <Typography component="h1" variant="h3" align="center">
+              List of tasks and times.
             </Typography>
             <TableContainer component={Paper}>
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left">Transaction Id:</TableCell>
-                    <TableCell align="right">Date:</TableCell>
-                    <TableCell align="right">Item Purchased:</TableCell>
-                    <TableCell align="right">Price:</TableCell>
-                    <TableCell align="right">Quantity Purchased:</TableCell>
+                    <TableCell align="left">Task:</TableCell>
+                    <TableCell align="right">Stocked:</TableCell>
+                    <TableCell align="right">Avg. Time Required Per:</TableCell>
+                    <TableCell align="right">Avg. Created Per Hour:</TableCell>
+                    <TableCell align="right">Multiplier:</TableCell>
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {currentUserData.purchases.map(
-                    ({
-                      price,
-                      quantity,
-                      itemName,
-                      itemId,
-                      transactionId,
-                      transactionDate
-                    }) => (
-                      <TableRow key={itemId}>
-                        <TableCell component="th" scope="row" align="left">
-                          {transactionId}
-                        </TableCell>
-                        <TableCell align="right">
-                          {new Date(transactionDate * 1000).toDateString()}
-                        </TableCell>
-                        <TableCell align="right">
-                          <RRLink to={'/item/' + itemId}>{itemName}</RRLink>
-                        </TableCell>
-                        <TableCell align="right">${price}</TableCell>
-                        <TableCell align="right">{quantity}</TableCell>
-                      </TableRow>
-                    )
-                  )}
+                  {data.map(({task, stocked, timeReqPer, multiplier}) => (
+                    <TableRow key={task}>
+                      <TableCell component="th" scope="row" align="left">
+                        {task}
+                      </TableCell>
+                      <TableCell align="right">{stocked}</TableCell>
+                      <TableCell align="right">
+                        {timeReqPer / 1000} seconds
+                      </TableCell>
+                      <TableCell align="right">
+                        {Math.floor(
+                          (3600 / (timeReqPer / 1000)) *
+                            (multiplier ? multiplier : 1)
+                        )}{' '}
+                        per hr
+                      </TableCell>
+                      <TableCell align="right">
+                        {multiplier ? multiplier : 'n/a'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
                   <TableRow>
-                    <TableCell colSpan={4} align="left">
-                      Total of Purchases:
+                    <TableCell colSpan={2} align="left">
+                      Finished Product
                     </TableCell>
                     <TableCell align="right">
-                      ${currentUserData.spent}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={4} align="left">
-                      Points earned in {simpleMonthConverter(currentMonthAsNum)}
-                      :
+                      {sumOfSeconds() / 1000} seconds
                     </TableCell>
                     <TableCell align="right">
-                      {currentUserData.points} pts
+                      {Math.floor(3600 / (sumOfSeconds() / 1000))}
                     </TableCell>
                   </TableRow>
                 </TableBody>
