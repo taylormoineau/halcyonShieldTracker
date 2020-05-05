@@ -49,3 +49,38 @@ export const data = [
     multiplier: null
   }
 ];
+
+export const assemblyInventory = [
+  {item: 'Snaps', stocked: 50000},
+  {item: 'Elastic', stocked: 30},
+  {item: 'Blanks', stocked: 2400},
+  {item: 'Foam', stocked: 230000}
+];
+
+export const smallInventory = [
+  {item: 'Hand Sanitizer', stocked: 6, warning: 8},
+  {item: 'Denatured Alcohol', stocked: 2, warning: 3},
+  {item: 'Packing Rolls', stocked: 7, warning: 5},
+  {item: 'Stickers', stocked: 6, warning: 10}
+];
+
+export const staff = [
+  {name: 'Adam', hours: 40, phone: 123456, email: 'Adam@email.com'},
+  {name: 'Rob', hours: 40, phone: 123456, email: 'Rob@email.com'},
+  {name: 'Chase', hours: 40, phone: 123456, email: 'Chase@email.com'},
+  {name: 'Macie', hours: 40, phone: 123456, email: 'Macie@email.com'},
+  {name: 'Emma', hours: 40, phone: 123456, email: 'Emma@email.com'},
+  {name: 'Stefan', hours: 20, phone: 123456, email: 'Stefan@email.com'},
+  {name: 'Ryan', hours: 20, phone: 123456, email: 'Ryan@email.com'},
+  {name: 'Zack', hours: 40, phone: 123456, email: 'Zack@email.com'},
+  {name: 'Kyle', hours: 20, phone: 123456, email: 'Kyle@email.com'}
+];
+
+export const sumOfHours = arrayOfStaff => {
+  let runningTotal = 0;
+
+  for (const p of arrayOfStaff) {
+    runningTotal += p.hours;
+  }
+  return runningTotal;
+};

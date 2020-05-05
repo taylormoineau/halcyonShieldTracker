@@ -11,6 +11,15 @@ import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import './rewards.css';
+import Button from '@material-ui/core/Button';
+
+const menuArr = [
+  {fieldName: 'staff', label: 'Staff'},
+  {fieldName: 'inventory', label: 'Inventory'},
+  {fieldName: 'tasks', label: 'Task List'},
+  {fieldName: 'simulate', label: 'Simulate Week'},
+  {fieldName: 'record', label: 'Record Info'}
+];
 
 const useStyles = makeStyles(() => ({
   paperForSplashPage: {padding: 30},
@@ -33,6 +42,19 @@ export const SplashRewards = () => {
         <LoadingPage />
       ) : (
         <div>
+          {menuArr.map(({fieldName, type = 'text', label}) => (
+            <Paper className={classes.paperForSplashPage} key={fieldName}>
+              <Button
+                onClick=""
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                {fieldName}
+              </Button>
+            </Paper>
+          ))}
+
           <Paper className={classes.paperForSplashPage}>
             <Box className={classes.boxMargin}>
               <Typography component="h3" variant="h3" align="center">

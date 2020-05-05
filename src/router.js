@@ -23,7 +23,7 @@ const theme = createMuiTheme({
       main: blue[500],
       dark: blue[700]
     },
-    secondary: {
+    thirdary: {
       light: green[300],
       main: green[500],
       dark: green[700]
